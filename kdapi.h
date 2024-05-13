@@ -1,0 +1,121 @@
+#ifndef KDAPI_H_
+#define KDAPI_H_
+
+#define KDAPI_DEFINED_LIBKDAPI
+
+#define KDAPI_VERSION_MAJOR 0
+#define KDAPI_VERSION_MINOR 1
+#define KDAPI_VERSION_PATCH 0
+
+
+#define KDAPI_TRUE 1
+#define KDAPI_FALSE 0
+
+
+// #define CPU_BASE_x86
+// #define CPU_BASE_x86_x64
+#define CPU_BASE_x64
+// #define CPU_BASE_ARM32
+// #define CPU_BASE_ARM64
+
+
+#if defined(CPU_BASE_x86_x64) || defined(CPU_BASE_x64) || defined(CPU_BASE_ARM64)
+  #define ARCH_BIT64
+  #define ARCH_BITS 64
+#else
+  #define ARCH_BIT32
+  #define ARCH_BITS 32
+#endif
+
+
+#if defined(CPU_BASE_x86) || defined(CPU_BASE_x86_x64) || defined(CPU_BASE_x64) || defined(CPU_BASE_ARM32) || defined(CPU_BASE_ARM64)
+  #define ENDIANNESS_LITTLE
+#else
+  #define ENDIANNESS_BIG
+#endif
+
+
+#define CPUORG_AMD_RYZEN7_4800H
+
+
+#if defined(_WIN32) || defined(_WIN64)
+  #define OPSYSTEM_WINDOWS
+#elif defined(__linux__)
+  #define OPSYSTEM_LINUX
+#elif defined(__APPLE__)
+  #define OPSYSTEM_APPLE
+#elif defined(__unix__)
+  #define OPSYSTEM_UNIX
+#else
+  #define OPSYSTEM_UNKNOWN
+#endif
+
+// #define OPSYSTEM_DOS
+// #define OPSYSTEM_DEBIAN_LINUX
+// #define OPSYSTEM_ARCH_LINUX
+// #define OPSYSTEM_REDHAT_LINUX
+// #define OPSYSTEM_MACOS
+// #define OPSYSTEM_BSD
+// #define OPSYSTEM_ANDROID
+// #define OPSYSTEM_IOS
+// #define OPSYSTEM_IPADOS
+
+
+#if defined(OPSYSTEM_MACOS) || defined(OPSYSTEM_IOS) || defined(OPSYSTEM_IPADOS)
+  #define OPSYSTEM_UNIXBASED KDAPI_TRUE
+#elif defined(OPSYSTEM_DEBIAN_LINUX) || defined(OPSYSTEM_ARCH_LINUX) || defined(OPSYSTEM_REDHAT_LINUX) || defined(OPSYSTEM_ANDROID)
+  #define OPSYSTEM_LINUXBASED KDAPI_TRUE
+#else
+  #define OPSYSTEM_UNIXBASED KDAPI_FALSE
+  #define OPSYSTEM_LINUXBASED KDAPI_FALSE
+#endif
+
+
+#if defined(_WIN64)
+  #define OPSYSTEM_BIT64
+  #define OPSYSTEM_BITS 64
+#elif defined(_WIN32)
+  #define OPSYSTEM_BIT32
+  #define OPSYSTEM_BITS 32
+#else
+  #define OPSYSTEM_BIT32
+  #define OPSYSTEM_BITS 32
+#endif
+
+
+#define OPSYSTEM_HUMAN_VERSION 11
+
+#define OPSYSTEM_HUMAN_VERSION_ALPHA KDAPI_FALSE
+#define OPSYSTEM_HUMAN_VERSION_BETA KDAPI_FALSE
+#define OPSYSTEM_HUMAN_VERSION_PRERELEASE KDAPI_FALSE
+#define OPSYSTEM_HUMAN_VERSION_ROLLING KDAPI_FALSE
+#define OPSYSTEM_HUMAN_VERSION_RELEASE KDAPI_TRUE
+#define OPSYSTEM_HUMAN_VERSION_STABLE KDAPI_TRUE
+
+#define OPSYSTEM_VERSION_MAJOR 10
+#define OPSYSTEM_VERSION_MINOR 0
+#define OPSYSTEM_VERSION_PATCH 22621
+#define OPSYSTEM_VERSION_BUILD 22621
+#define OPSYSTEM_VERSION_REVISION 2506
+
+#if defined(OPSYSTEM_WINDOWS)
+  #define OPSYSTEM_FULL_VERSION \
+  { OPSYSTEM_VERSION_MAJOR, OPSYSTEM_VERSION_MINOR, OPSYSTEM_VERSION_BUILD, OPSYSTEM_VERSION_REVISION }
+#else 
+  #define OPSYSTEM_FULL_VERSION \
+  { OPSYSTEM_VERSION_MAJOR, OPSYSTEM_VERSION_MINOR, OPSYSTEM_VERSION_PATCH }
+#endif
+
+
+#if defined(OPSYSTEM_WINDOWS) && (defined(CPU_BASE_x86_x64) || defined(CPU_BASE_x64))
+  #define KDAPI __cdecl
+#else
+  #define KDAPI
+#endif
+
+
+#undef KDAPI_TRUE
+#undef KDAPI_FALSE
+
+
+#endif  // KDAPI_H_

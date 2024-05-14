@@ -1,6 +1,6 @@
 # KDAPI
 
-  A single-header C API to be used in all other C projects.
+  A simple header-only C library for compile-time system information.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@
 
 ## Description
 
-This is a simple header-only c library which is used in all of my other C projcets.
+This is a simple header-only C library to determine system information like compiler, target OS, target CPU, endianness, import-export signature, and public API at compile-time.
 
 See the list of features and functions implemented till now in [Project Status](#project-status).
 
@@ -110,7 +110,7 @@ The naming convension used in this project will be listed soon.
 
 ## License
 
-This project is distributed under the **MIT License**. See [LICENSE](LICENSE) for more information.
+This project is distributed under the **BSD 2-Clause License**. See [LICENSE](LICENSE) for more information.
 
 ## Project Status
 

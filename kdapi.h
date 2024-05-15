@@ -43,7 +43,7 @@
  * - Use `KD_IMPORTEXPORT` for import and export signatures when building DLL.
  * - Use `KDAPI(T)` (T -> return type) for function definitions.
  * - Use `KD_EXTERN_BEGIN` and `KD_EXTERN_END` to wrap function declarations.
- * - Use `KD_LITTLE_ENDIAN` and `KD_BIG_ENDIAN` to determine endianness.
+ * - Use `KD_ENDIAN_LITTLE` and `KD_ENDIAN_BIG` to determine endianness.
  */
 
 
@@ -52,6 +52,9 @@
 #define KD_VERSION_MAJOR 1
 #define KD_VERSION_MINOR 0
 #define KD_VERSION_PATCH 0
+
+#define KD_VERSION_STR "1.0.0"
+#define KD_VERSION_ARR { KD_VERSION_MAJOR, KD_VERSION_MINOR, KD_VERSION_PATCH }
 
 
 /**
@@ -245,7 +248,8 @@
 #endif
 
 #if defined _CRAYT3E || defined _CRAYMPP
-  #define KD_CPU_CRAYT3E 1  // target processor is a DEC Alpha 21164 used in a Cray T3E
+  /* target processor is a DEC Alpha 21164 used in a Cray T3E */
+  #define KD_CPU_CRAYT3E 1
 #endif
 
 #if defined CRAY || defined _CRAY && !defined _CRAYT3E
@@ -419,7 +423,7 @@
  */
 
 #if defined KD_CPU_X86 || defined KD_CPU_AXP || defined KD_CPU_STRONGARM || defined KD_OS_WIN32 || defined KD_OS_WINCE || defined __MIPSEL__
-  #define KD_LITTLE_ENDIAN 1
+  #define KD_ENDIAN_LITTLE 1
 #else
-  #define KD_BIG_ENDIAN 1
+  #define KD_ENDIAN_BIG 1
 #endif

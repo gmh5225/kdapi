@@ -43,6 +43,8 @@ int main(int argc, char **argv)
   (void) argv;
 
   (void) printf("KDAPI test :: begin\n\n");
+
+  (void) printf("API Version: " KD_VERSION_STR "\n");
   
   (void) printf(
     "Compiler: "
@@ -185,11 +187,11 @@ int main(int argc, char **argv)
 
   (void) printf(
     "Endianness: "
-    #if defined KD_LITTLE_ENDIAN
+    #if defined KD_ENDIAN_LITTLE
     "Little"
     #else
     "Big"
-    #endif  // KD_LITTLE_ENDIAN
+    #endif  // KD_ENDIAN_LITTLE
     "\n"
   );
 

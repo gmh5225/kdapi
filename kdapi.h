@@ -1,8 +1,8 @@
 /**
  * @file kdapi.h
  * @author Kumarjit Das
- * @date 2024-05-14
- * @version 1.0.0
+ * @date 2024-06-02
+ * @version 1.1.0
  * @brief A simple header-only C library for compile-time system information.
  */
 /**
@@ -47,13 +47,16 @@
  */
 
 
-#define KD_DEFINED_LIBKDAPI
+#if defined KD_DEFINED_LIBKDAPI
+  #undef KD_DEFINED_LIBKDAPI
+  #define KD_DEFINED_LIBKDAPI 1
+#endif  /* KD_DEFINED_LIBKDAPI */
 
 #define KD_VERSION_MAJOR 1
-#define KD_VERSION_MINOR 0
+#define KD_VERSION_MINOR 1
 #define KD_VERSION_PATCH 0
 
-#define KD_VERSION_STR "1.0.0"
+#define KD_VERSION_STR "1.1.0"
 #define KD_VERSION_ARR { KD_VERSION_MAJOR, KD_VERSION_MINOR, KD_VERSION_PATCH }
 
 
@@ -349,7 +352,7 @@
           #define KD_IMPORTEXPORT
         #endif
       #endif
-    #endif  // defined _MSC_VER
+    #endif  /* defined _MSC_VER */
     #if defined __BORLANDC__
       #if (__BORLANDC__ >= 0x500)
         #if defined KD_BUILDING_LIB
@@ -364,7 +367,7 @@
           #define KD_IMPORTEXPORT
         #endif
       #endif
-    #endif  // defined __BORLANDC__
+    #endif  /* defined __BORLANDC__ */
     /* for all other compilers */
     #if defined __GNUC__ || defined __WATCOMC__ || defined __MWERKS__
       #if defined KD_BUILDING_LIB
@@ -372,11 +375,11 @@
       #else
         #define KD_IMPORTEXPORT __declspec(dllimport)
       #endif
-    #endif  // all other compilers
+    #endif  /* all other compilers */
     #if !defined KD_IMPORTEXPORT
       #error Building DLLs not supported on this compiler
     #endif
-  #endif  // defined KD_OS_WIN32
+  #endif  /* defined KD_OS_WIN32 */
 #endif
 
 #if !defined KD_IMPORTEXPORT

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# file: setup_env.template.bat
+# file: setup_env.template.sh
 # author: Kumarjit Das
 # date: 2024-06-02
 # brief: A template for build environment setup.

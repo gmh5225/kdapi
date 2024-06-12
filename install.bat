@@ -1,6 +1,6 @@
 @REM file: install.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-02
+@REM date: 2024-06-12
 @REM brief: Install script file for project builds.
 @REM
 @REM
@@ -42,27 +42,11 @@ SET _KDAPI_GOTO_ERROR_EXIT=false
 SET "TAB=	"
 
 
-:_KDAPI_CHOOSE_GOTO
-  IF "%_KDAPI_GOTO_ENTRY%"=="true" (
-    SET _KDAPI_GOTO_ENTRY=false
-    GOTO :_KDAPI_ENTRY
-  ) ELSE IF "%_KDAPI_GOTO_ENVIRONMENT_INFO%"=="true" (
-    SET _KDAPI_GOTO_ENVIRONMENT_INFO=false
-    GOTO :_KDAPI_ENVIRONMENT_INFO
-  ) ELSE IF "%_KDAPI_GOTO_COMPLETE%"=="true" (
-    SET _KDAPI_GOTO_COMPLETE=false
-    GOTO :_KDAPI_COMPLETE
-  ) ELSE IF "%_KDAPI_GOTO_ERROR_EXIT%"=="true" (
-    SET _KDAPI_GOTO_ERROR_EXIT=false
-    GOTO :_KDAPI_ERROR_EXIT
-  )
-
-  ECHO [!!!] EXITING INSTALL.
-  EXIT /B 0
+GOTO :_KDAPI_START_INSTALLING
 
 
 :_KDAPI_ENVIRONMENT_INFO
-  ECHO --------------------------------------------------------------------------------
+  ECHO [INFO] -------------------------------------------------------------------------
   ECHO Make sure to set these environment variables before running this script.
   ECHO You can create an environment setup batch file for this. By default this install
   ECHO script will search for 'setup_env.bat'.
@@ -75,10 +59,10 @@ SET "TAB=	"
   ECHO %TAB%- KDAPI_INSTALL_VERSION
   ECHO %TAB%- KDAPI_INSTALL_INCLUDE_FILES
 
-  GOTO :_KDAPI_CHOOSE_GOTO
+  GOTO :_KDAPI_ERROR_EXIT
 
 
-:_KDAPI_ENTRY
+:_KDAPI_START_INSTALLING
   ECHO [INSTALL] Initializing install...
 
 
@@ -90,9 +74,9 @@ IF NOT DEFINED KDAPI_SETUP_ENV_FILE (
 IF EXIST "%KDAPI_SETUP_ENV_FILE%" (
   ECHO [INSTALL] Setup file found ^(%KDAPI_SETUP_ENV_FILE%^)
   ECHO [INSTALL] Setting up install environment...
-  ECHO ---------------------------------------
-  CALL %KDAPI_SETUP_ENV_FILE%
-  ECHO ---------------------------------------
+  ECHO [INSTALL] ----------------------------------------------------------------------
+  CALL .\%KDAPI_SETUP_ENV_FILE%
+  ECHO [INSTALL] ----------------------------------------------------------------------
   ECHO [INSTALL] Install environment setup completed.
 ) ELSE (
   ECHO [ERROR] Setup environment file ^(%KDAPI_SETUP_ENV_FILE%^) does not exist.
@@ -107,8 +91,7 @@ IF NOT DEFINED KDAPI_INSTALL_LOCATION (
 
 IF NOT EXIST "%KDAPI_INSTALL_LOCATION%" (
   ECHO [INSTALL] Provided location/directory ^(%KDAPI_INSTALL_LOCATION%^) does not exist.
-  SET _KDAPI_GOTO_ERROR_EXIT=true
-  GOTO :_KDAPI_CHOOSE_GOTO
+  GOTO :_KDAPI_ENVIRONMENT_INFO
 )
 
 ECHO [INSTALL] Install location: %KDAPI_INSTALL_LOCATION%
@@ -117,9 +100,7 @@ ECHO [INSTALL] Install location: %KDAPI_INSTALL_LOCATION%
 @REM Check KDAPI_INSTALL_NAME
 IF NOT DEFINED KDAPI_INSTALL_NAME (
   ECHO [ERROR] `KDAPI_INSTALL_NAME` is not set.
-  SET _KDAPI_GOTO_ENVIRONMENT_INFO=true
-  SET _KDAPI_GOTO_ERROR_EXIT=true
-  GOTO :_KDAPI_CHOOSE_GOTO
+  GOTO :_KDAPI_ENVIRONMENT_INFO
 )
 
 ECHO [INSTALL] Install directory name: %KDAPI_INSTALL_NAME%
@@ -128,9 +109,7 @@ ECHO [INSTALL] Install directory name: %KDAPI_INSTALL_NAME%
 @REM Check KDAPI_INSTALL_VERSION
 IF NOT DEFINED KDAPI_INSTALL_VERSION (
   ECHO [ERROR] `KDAPI_INSTALL_VERSION` is not set.
-  SET _KDAPI_GOTO_ENVIRONMENT_INFO=true
-  SET _KDAPI_GOTO_ERROR_EXIT=true
-  GOTO :_KDAPI_CHOOSE_GOTO
+  GOTO :_KDAPI_ENVIRONMENT_INFO
 )
 
 ECHO [INSTALL] Install version: %KDAPI_INSTALL_VERSION%
@@ -139,9 +118,7 @@ ECHO [INSTALL] Install version: %KDAPI_INSTALL_VERSION%
 @REM Check KDAPI_INSTALL_INCLUDE_FILES
 IF NOT DEFINED KDAPI_INSTALL_INCLUDE_FILES (
   ECHO [ERROR] `KDAPI_INSTALL_INCLUDE_FILES` is not set.
-  SET _KDAPI_GOTO_ENVIRONMENT_INFO=true
-  SET _KDAPI_GOTO_ERROR_EXIT=true
-  GOTO :_KDAPI_CHOOSE_GOTO
+  GOTO :_KDAPI_ENVIRONMENT_INFO
 )
 
 ECHO [INSTALL] Include files: %KDAPI_INSTALL_INCLUDE_FILES%
@@ -157,21 +134,28 @@ ECHO [INSTALL] Created install directory ^("%KDAPI_INSTALL_DIR%"^).
 
 
 @REM Copy include files
+SET KDAPI_TMP_ERR=false
+
 FOR %%f IN (%KDAPI_INSTALL_INCLUDE_FILES%) DO (
   IF EXIST "%%f" (
     COPY "%%f" "%KDAPI_INSTALL_DIR%\" >nul
     ECHO [INSTALL] Copied %%f to %KDAPI_INSTALL_DIR%
   ) ELSE (
     ECHO [ERROR] File ^(%%f^) does not exist.
-    SET _KDAPI_GOTO_ERROR_EXIT=true
-    GOTO :_KDAPI_CHOOSE_GOTO
+    SET KDAPI_TMP_ERR=true
   )
+)
+
+IF "%KDAPI_TMP_ERR%"=="true" (
+  GOTO :_KDAPI_ERROR_EXIT
 )
 
 ECHO [INSTALL] Copied all include files.
 
 
 @REM Copy license, readme, and release-notes files
+SET KDAPI_TMP_ERR=false
+
 SET "KDAPI_INSTALL_OTHER_FILES="LICENSE.txt" "README.md" "Release Notes.md""
 FOR %%f IN (%KDAPI_INSTALL_OTHER_FILES%) DO (
   IF EXIST "%%f" (
@@ -179,9 +163,11 @@ FOR %%f IN (%KDAPI_INSTALL_OTHER_FILES%) DO (
     ECHO [INSTALL] Copied %%f to %KDAPI_INSTALL_DIR%
   ) ELSE (
     ECHO [ERROR] File ^(%%f^) does not exist.
-    SET _KDAPI_GOTO_ERROR_EXIT=true
-    GOTO :_KDAPI_CHOOSE_GOTO
   )
+)
+
+IF "%KDAPI_TMP_ERR%"=="true" (
+  GOTO :_KDAPI_ERROR_EXIT
 )
 
 ECHO [INSTALL] Copied license, readme, and release-notes files.
@@ -191,34 +177,10 @@ GOTO :_KDAPI_COMPLETE
 
 
 :_KDAPI_ERROR_EXIT
-  ECHO [ERROR] Error(s) occured. Could not finish installing.
-  
-  SET TAB=
-  SET _KDAPI_GOTO_ENVIRONMENT_INFO=
-  SET _KDAPI_GOTO_ENTRY=
-  SET _KDAPI_GOTO_COMPLETE=
-  SET _KDAPI_GOTO_ERROR_EXIT=
-  SET KDAPI_SETUP_ENV_FILE=
-  SET KDAPI_INSTALL_LOCATION=
-  SET KDAPI_INSTALL_NAME=
-  SET KDAPI_INSTALL_VERSION=
-  SET KDAPI_INSTALL_INCLUDE_FILES=
-  
+  ECHO [ERROR] Error^(s^) occured. Could not finish installing.
   EXIT /B 1
 
 
 :_KDAPI_COMPLETE
   ECHO [INSTALL] Finished installing.
-  
-  SET TAB=
-  SET _KDAPI_GOTO_ENVIRONMENT_INFO=
-  SET _KDAPI_GOTO_ENTRY=
-  SET _KDAPI_GOTO_COMPLETE=
-  SET _KDAPI_GOTO_ERROR_EXIT=
-  SET KDAPI_SETUP_ENV_FILE=
-  SET KDAPI_INSTALL_LOCATION=
-  SET KDAPI_INSTALL_NAME=
-  SET KDAPI_INSTALL_VERSION=
-  SET KDAPI_INSTALL_INCLUDE_FILES=
-
   EXIT /B 0

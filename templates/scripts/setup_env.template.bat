@@ -1,6 +1,6 @@
 @REM file: setup_env.template.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-02
+@REM date: 2024-06-12
 @REM brief: A template for build environment setup.
 @REM
 @REM
@@ -35,26 +35,57 @@
 SETLOCAL ENABLEDELAYEDEXPANSION
 
 
+@REM Build specific
+ECHO Setting build specific variables...
+
 @REM SET KDAPI_HOST_ARCH=x86
 SET KDAPI_HOST_ARCH=x64
+ECHO Host architecture set to '%KDAPI_HOST_ARCH%'
 
 @REM SET KDAPI_TARGET_ARCH=X86
 SET KDAPI_TARGET_ARCH=x64
+ECHO Target architecture set to '%KDAPI_TARGET_ARCH%'
 
 @REM SET KDAPI_COMPILER_PROVIDER=mingw
-SET KDAPI_COMPILER_PROVIDER=llvm
-@REM SET KDAPI_COMPILER_PROVIDER=msvc
+@REM SET KDAPI_COMPILER_PROVIDER=llvm
+SET KDAPI_COMPILER_PROVIDER=msvc
+ECHO Compiler provider set to '%KDAPI_COMPILER_PROVIDER%'
 
-@REM SET KDAPI_BUILD_TOOLS_PATH=C:\Users\kumar\mingw32\bin
-@REM SET KDAPI_BUILD_TOOLS_PATH=C:\Users\kumar\mingw64\bin
-SET KDAPI_BUILD_TOOLS_PATH=C:\Users\kumar\llvm\bin
-@REM SET KDAPI_BUILD_TOOLS_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools
+@REM "SET KDAPI_BUILD_TOOLS_PATH=C:\mingw32\bin"
+@REM "SET KDAPI_BUILD_TOOLS_PATH=C:\mingw64\bin"
+@REM "SET KDAPI_BUILD_TOOLS_PATH=C:\llvm\bin"
+SET "KDAPI_BUILD_TOOLS_PATH=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
+ECHO Build tools path set to '%KDAPI_BUILD_TOOLS_PATH%'
 
 @REM SET KDAPI_COMPILER_NAME=gcc.exe
 @REM SET KDAPI_COMPILER_NAME=clang.exe
 @REM SET KDAPI_COMPILER_NAME=cl.exe
+@REM ECHO Compiler name set to '%KDAPI_COMPILER_NAME%'
+
+@REM SET KDAPI_LINKER_NAME=ld.exe
+@REM SET KDAPI_LINKER_NAME=clang-ld.exe
+@REM SET KDAPI_LINKER_NAME=link.exe
+@REM ECHO Linker name set to '%KDAPI_LINKER_NAME%'
 
 SET KDAPI_COMPILER_OPTIMIZE=true
 @REM SET KDAPI_COMPILER_OPTIMIZE=false
+ECHO Compiler optimization set to '%KDAPI_COMPILER_OPTIMIZE%'
 
-@REM SET KDAPI_BUILD_TYPE=debug
+@REM SET KDAPI_BUILD_TYPE=release
+SET KDAPI_BUILD_TYPE=debug
+ECHO Build type set to '%KDAPI_BUILD_TYPE%'
+
+
+@REM Installation specific
+
+SET "KDAPI_INSTALL_LOCATION=C:\Program Files"
+ECHO Install location set to '%KDAPI_INSTALL_LOCATION%'
+
+SET KDAPI_INSTALL_NAME=kdapi
+ECHO Install name set to '%KDAPI_INSTALL_NAME%'
+
+SET KDAPI_INSTALL_VERSION=1.1.0
+ECHO Install version set to '%KDAPI_INSTALL_VERSION%'
+
+SET "KDAPI_INSTALL_INCLUDE_FILES=kdapi.h"
+ECHO Include files are %KDAPI_INSTALL_INCLUDE_FILES%

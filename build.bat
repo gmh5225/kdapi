@@ -1,6 +1,6 @@
 @REM file: build.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-02
+@REM date: 2024-06-12
 @REM brief: Build script file for project.
 @REM
 @REM
@@ -54,7 +54,7 @@ GOTO :KDAPI_START_BUILDING
 
 @REM Print environment information
 :_KDAPI_ENVIRONMENT_INFO
-  ECHO --------------------------------------------------------------------------------
+  ECHO [INFO] -------------------------------------------------------------------------
   ECHO Make sure to set these environment variables before running this script.
   ECHO You can create an environment setup batch file for this. By default this build
   ECHO script will search for 'setup_env.bat'.
@@ -146,15 +146,15 @@ IF "%KDAPI_RUN_CLEAN_CMD%"=="true" (
     SET _KDAPI_ARG=
     
     IF "%KDAPI_RUN_CLEAN_ALL_CMD%"=="true" (
-      SET _KDAPI_ARG="all"
+      SET _KDAPI_ARG=all
     )
 
     ECHO [BUILD] Cleaning up previous builds...
-    ECHO ---------------------------------------
+    ECHO [BUILD] ------------------------------------------------------------------------
 
-    CALL %KDAPI_CLEAN_FILE% %_KDAPI_ARG%
+    CALL .\%KDAPI_CLEAN_FILE% !_KDAPI_ARG!
 
-    ECHO ---------------------------------------
+    ECHO [BUILD] ------------------------------------------------------------------------
     ECHO [BUILD] Previous builds cleaned.
   )
 )
@@ -168,9 +168,9 @@ IF NOT DEFINED KDAPI_SETUP_ENV_FILE (
 IF EXIST "%KDAPI_SETUP_ENV_FILE%" (
   ECHO [BUILD] Setup file found ^(%KDAPI_SETUP_ENV_FILE%^)
   ECHO [BUILD] Setting up build environment...
-  ECHO ---------------------------------------
+  ECHO [BUILD] ------------------------------------------------------------------------
   CALL %KDAPI_SETUP_ENV_FILE%
-  ECHO ---------------------------------------
+  ECHO [BUILD] ------------------------------------------------------------------------
   ECHO [BUILD] Build environment setup completed.
 ) ELSE (
   ECHO [ERROR] Setup environment file ^(%KDAPI_SETUP_ENV_FILE%^) does not exist.
@@ -377,7 +377,11 @@ IF "%KDAPI_COMPILER_OPTIMIZE%"=="true" IF "%KDAPI_BUILD_TYPE%"=="release" (
   ) ELSE IF "%KDAPI_COMPILER_PROVIDER%"=="llvm" (
     SET KDAPI_COMPILER_OPTIMIZE_FLAGS=-O2
   ) ELSE IF "%KDAPI_COMPILER_PROVIDER%"=="msvc" (
-    SET KDAPI_COMPILER_OPTIMIZE_FLAGS=/O2
+    SET "KDAPI_COMPILER_OPTIMIZE_FLAGS=/O2 /Zi"
+  )
+) ELSE (
+  IF "%KDAPI_COMPILER_PROVIDER%"=="msvc" (
+    SET KDAPI_COMPILER_OPTIMIZE_FLAGS=/Zi
   )
 )
 
@@ -400,7 +404,7 @@ SET KDAPI_EXEC_FILE=%KDAPI_OUTPUT_NAME%%KDAPI_BUILD_POSTFIX%.exe
 IF "%KDAPI_COMPILER_PROVIDER%"=="mingw" (
   SET KDAPI_OBJECT_FILE_EXT=o
 ) ELSE IF "%KDAPI_COMPILER_PROVIDER%"=="llvm" (
-  SET KDAPI_OBJECT_FILE_EXT=o
+  SET KDAPI_OBJECT_FILE_EXT=obj
 ) ELSE IF "%KDAPI_COMPILER_PROVIDER%"=="msvc" (
   SET KDAPI_OBJECT_FILE_EXT=obj
 )
@@ -522,11 +526,14 @@ IF "%KDAPI_TARGET_ARCH%"=="x86" (
   SET KDAPI_OBJECT_FILES=
 
   FOR %%i IN (%KDAPI_SOURCE_FILES%) DO (
-    SET "KDAPI_TMP_CMD=!KDAPI_COMPILER! -std=iso9899:1990 !KDAPI_COMPILER_OPTIMIZE_FLAGS! !KDAPI_TARGET_ARCH_FLAG! !KDAPI_DEBUG_FLAG! !KDAPI_WARNING_FLAG! -c !KDAPI_SOURCE_DIR!\%%i -I!KDAPI_INCLUDE_DIR! -o !KDAPI_BIN_DIR!\%%~ni.!KDAPI_OBJECT_FILE_EXT!"
+    ECHO [BUILD] Compiling '%%i'...
+
+    SET "KDAPI_TMP_CMD=!KDAPI_COMPILER! -std=iso9899:1990 !KDAPI_COMPILER_OPTIMIZE_FLAGS! !KDAPI_TARGET_ARCH_FLAG! !KDAPI_DEBUG_FLAG! !KDAPI_WARNING_FLAG! -c !KDAPI_SOURCE_DIR!\%%i -I!KDAPI_INCLUDE_DIR! -o !KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
+
     ECHO [CMD] !KDAPI_TMP_CMD!
     !KDAPI_TMP_CMD!
 
-    SET "KDAPI_OBJECT_FILES=!KDAPI_OBJECT_FILES! !KDAPI_BIN_DIR!\%%~ni.!KDAPI_OBJECT_FILE_EXT!"
+    SET "KDAPI_OBJECT_FILES=!KDAPI_OBJECT_FILES! !KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
   )
 
   ECHO [BUILD] Linking object files...
@@ -539,13 +546,22 @@ IF "%KDAPI_TARGET_ARCH%"=="x86" (
 
 @REM For LLVM build
 :_KDAPI_LLVM_BUILD
-  ECHO [BUILD] Compiling object files...
-  SET "KDAPI_TMP_CMD=%KDAPI_COMPILER% -std=c89 %KDAPI_COMPILER_OPTIMIZE_FLAGS% %KDAPI_TARGET_ARCH_FLAG% %KDAPI_DEBUG_FLAG% %KDAPI_WARNING_FLAG% -c %KDAPI_SOURCE_DIR%\test.c -I%KDAPI_INCLUDE_DIR% -o %KDAPI_BIN_DIR%\%KDAPI_OBJECT_FILE_EXT%"
-  ECHO [CMD] %KDAPI_TMP_CMD%
-  %KDAPI_TMP_CMD%
+  ECHO [BUILD] Compiling source files...
+  SET KDAPI_OBJECT_FILES=
+
+  FOR %%i IN (%KDAPI_SOURCE_FILES%) DO (
+    ECHO [BUILD] Compiling '%%i'...
+
+    SET "KDAPI_TMP_CMD=!KDAPI_COMPILER! -std=c89 !KDAPI_COMPILER_OPTIMIZE_FLAGS! !KDAPI_TARGET_ARCH_FLAG! !KDAPI_DEBUG_FLAG! !KDAPI_WARNING_FLAG! -c !KDAPI_SOURCE_DIR!\%%i -I!KDAPI_INCLUDE_DIR! -o !KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
+
+    ECHO [CMD] !KDAPI_TMP_CMD!
+    !KDAPI_TMP_CMD!
+
+    SET "KDAPI_OBJECT_FILES=!KDAPI_OBJECT_FILES! !KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
+  )
 
   ECHO [BUILD] Building executable...
-  SET "KDAPI_TMP_CMD=%KDAPI_LINKER% %KDAPI_TARGET_ARCH_FLAG% %KDAPI_DEBUG_FLAG% %KDAPI_BIN_DIR%\%KDAPI_OBJECT_FILE_EXT% -o %KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%"
+  SET "KDAPI_TMP_CMD=%KDAPI_LINKER% %KDAPI_TARGET_ARCH_FLAG% %KDAPI_DEBUG_FLAG% %KDAPI_OBJECT_FILES% -o %KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%"
   ECHO [CMD] %KDAPI_TMP_CMD%
   %KDAPI_TMP_CMD%
 
@@ -555,12 +571,21 @@ IF "%KDAPI_TARGET_ARCH%"=="x86" (
 @REM For MSVC build
 :_KDAPI_MSVC_BUILD
   ECHO [BUILD] Compiling object files...
-  SET "KDAPI_TMP_CMD=%KDAPI_COMPILER% /Za /c %KDAPI_COMPILER_OPTIMIZE_FLAGS% %KDAPI_DEBUG_FLAG% %KDAPI_WARNING_FLAG% /Fo%KDAPI_BIN_DIR%\%KDAPI_OBJECT_FILE_EXT% /I%KDAPI_INCLUDE_DIR% %KDAPI_SOURCE_DIR%\test.c"
-  ECHO [CMD] %KDAPI_TMP_CMD%
-  %KDAPI_TMP_CMD%
+  SET KDAPI_OBJECT_FILES=
+
+  FOR %%i IN (%KDAPI_SOURCE_FILES%) DO (
+    ECHO [BUILD] Compiling '%%i'...
+
+    SET "KDAPI_TMP_CMD=!KDAPI_COMPILER! /MD /Za /Gy /c !KDAPI_COMPILER_OPTIMIZE_FLAGS! !KDAPI_DEBUG_FLAG! !KDAPI_WARNING_FLAG! /I!KDAPI_INCLUDE_DIR! !KDAPI_SOURCE_DIR!\%%i /Fo!KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
+
+    ECHO [CMD] !KDAPI_TMP_CMD!
+    !KDAPI_TMP_CMD!
+
+    SET "KDAPI_OBJECT_FILES=!KDAPI_OBJECT_FILES! !KDAPI_BIN_DIR!\%%~ni!KDAPI_BUILD_POSTFIX!.!KDAPI_OBJECT_FILE_EXT!"
+  )
 
   ECHO [BUILD] Building executable...
-  SET "KDAPI_TMP_CMD=%KDAPI_LINKER% %KDAPI_DEBUG_FLAG% %KDAPI_TARGET_ARCH_FLAG% %KDAPI_BIN_DIR%\%KDAPI_OBJECT_FILE_EXT% /OUT:%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%"
+  SET "KDAPI_TMP_CMD=%KDAPI_LINKER% %KDAPI_DEBUG_FLAG% /OPT:REF /OPT:ICF %KDAPI_TARGET_ARCH_FLAG% %KDAPI_OBJECT_FILES% /OUT:%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%"
   ECHO [CMD] %KDAPI_TMP_CMD%
   %KDAPI_TMP_CMD%
 
@@ -571,18 +596,31 @@ IF "%KDAPI_TARGET_ARCH%"=="x86" (
   ECHO [BUILD] Finished building.
 
   IF "%KDAPI_RUN_TEST_CMD%"=="true" (
-    GOTO :_KDAPI_RUN_EXEC
+    ECHO [BUILD] Running the test executable...
+    ECHO [CMD] .\%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%
+    ECHO [BUILD] ------------------------------------------------------------------------
+    ECHO.
+    
+    .\%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%
+    
+    ECHO.
+    ECHO [BUILD] ------------------------------------------------------------------------
+
+    IF %ERRORLEVEL%==0 (
+      ECHO [BUILD] Finished running.
+    ) ELSE (
+      ECHO [ERROR] Error^(s^) occured while running the executable.
+    )
   ) ELSE (
     ECHO [INFO] To run use command:  `.\%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%`
   )
 
-  @REM Clean up previous builds
   IF "%KDAPI_RUN_INSTALL_CMD%"=="true" (
     IF EXIST "%KDAPI_INSTALL_FILE%" (
       ECHO [BUILD] Installing project...
-      ECHO -----------------------------
-      CALL %KDAPI_INSTALL_FILE%
-      ECHO -----------------------------
+      ECHO [BUILD] ------------------------------------------------------------------------
+      CALL .\%KDAPI_INSTALL_FILE%
+      ECHO [BUILD] ------------------------------------------------------------------------
       ECHO [BUILD] Project installed.
     )
   )
@@ -593,18 +631,3 @@ IF "%KDAPI_TARGET_ARCH%"=="x86" (
 :_KDAPI_ERROR_EXIT
   ECHO [BUILD] Error^(s^) occured. Could not finish building.
   EXIT /B 1
-
-
-:_KDAPI_RUN_EXEC
-  ECHO [BUILD] Running the test executable...
-  ECHO [CMD] .\%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%
-  ECHO --------------------------------------
-  ECHO.
-  
-  .\%KDAPI_BIN_DIR%\%KDAPI_EXEC_FILE%
-  
-  ECHO.
-  ECHO --------------------------------------
-  ECHO [BUILD] Finished running.
-
-  EXIT /B 0

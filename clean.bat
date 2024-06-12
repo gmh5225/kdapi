@@ -1,6 +1,6 @@
 @REM file: clean.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-02
+@REM date: 2024-06-12
 @REM brief: Clean script file for project builds.
 @REM
 @REM
@@ -44,62 +44,62 @@ SET KDAPI_LIB_DIR=%KDAPI_BUILD_DIR%\lib
 SET KDAPI_BIN_DIR=%KDAPI_BUILD_DIR%\bin
 
 
-IF "%1"=="all" (
-    IF EXIST "%KDAPI_BUILD_DIR%" (
-        ECHO [CLEAN] Removing the entire build directory...
-        RMDIR /S /Q "%KDAPI_BUILD_DIR%"
-        ECHO [CLEAN] All the contents of "%KDAPI_BUILD_DIR%" directory including itself have been deleted.
-    ) ELSE (
-        ECHO [CLEAN] "%KDAPI_BUILD_DIR%" does not exist.
-        GOTO :_KDAPI_NOTHING_TO_CLEAN
-    )
+IF "%~1"=="all" (
+  IF EXIST "%KDAPI_BUILD_DIR%" (
+    ECHO [CLEAN] Removing the entire build directory...
+    RMDIR /S /Q "%KDAPI_BUILD_DIR%"
+    ECHO [CLEAN] All the contents of "%KDAPI_BUILD_DIR%" directory including itself have been deleted.
+  ) ELSE (
+    ECHO [CLEAN] "%KDAPI_BUILD_DIR%" does not exist.
+    GOTO :_KDAPI_NOTHING_TO_CLEAN
+  )
 
-    GOTO :_KDAPI_COMPLETE
+  GOTO :_KDAPI_COMPLETE
 )
 
 
 IF NOT EXIST "%KDAPI_LIB_DIR%" IF NOT EXIST "%KDAPI_BIN_DIR%" (
-    GOTO :_KDAPI_NOTHING_TO_CLEAN
+  GOTO :_KDAPI_NOTHING_TO_CLEAN
 )
 
 
 @REM Clean the lib directory
 IF EXIST "%KDAPI_LIB_DIR%" (
-    ECHO [CLEAN] Removing contents of "%KDAPI_LIB_DIR%"...
+  ECHO [CLEAN] Removing contents of "%KDAPI_LIB_DIR%"...
 
-    @REM Delete all files in the directory
-    DEL /Q "%KDAPI_LIB_DIR%\*.*"
+  @REM Delete all files in the directory
+  DEL /Q "%KDAPI_LIB_DIR%\*.*"
 
-    @REM Delete all subdirectories and their contents
-    FOR /D %%x IN ("%KDAPI_LIB_DIR%\*") DO RMDIR /S /Q "%%x"
+  @REM Delete all subdirectories and their contents
+  FOR /D %%x IN ("%KDAPI_LIB_DIR%\*") DO RMDIR /S /Q "%%x"
 
-    ECHO [CLEAN] All the contents of "%KDAPI_LIB_DIR%" has been removed.
+  ECHO [CLEAN] All the contents of "%KDAPI_LIB_DIR%" has been removed.
 ) ELSE (
-    ECHO [CLEAN] "%KDAPI_LIB_DIR%" does not exist.
+  ECHO [CLEAN] "%KDAPI_LIB_DIR%" does not exist.
 )
 
 
 @REM Clean the bin directory
 IF EXIST "%KDAPI_BIN_DIR%" (
-    ECHO [CLEAN] Removing contents of "%KDAPI_BIN_DIR%"...
+  ECHO [CLEAN] Removing contents of "%KDAPI_BIN_DIR%"...
 
-    @REM Delete all files in the directory
-    DEL /Q "%KDAPI_BIN_DIR%\*.*"
+  @REM Delete all files in the directory
+  DEL /Q "%KDAPI_BIN_DIR%\*.*"
 
-    @REM Delete all subdirectories and their contents
-    FOR /D %%x IN ("%KDAPI_BIN_DIR%\*") DO RMDIR /S /Q "%%x"
+  @REM Delete all subdirectories and their contents
+  FOR /D %%x IN ("%KDAPI_BIN_DIR%\*") DO RMDIR /S /Q "%%x"
 
-    ECHO [CLEAN] All the contents of "%KDAPI_BIN_DIR%" has been deleted.
+  ECHO [CLEAN] All the contents of "%KDAPI_BIN_DIR%" has been deleted.
 ) ELSE (
-    ECHO [CLEAN] "%KDAPI_BIN_DIR%" does not exist.
+  ECHO [CLEAN] "%KDAPI_BIN_DIR%" does not exist.
 )
 
 
 :_KDAPI_COMPLETE
-    ECHO [CLEAN] Cleaning completed.
-    EXIT /B 0
+  ECHO [CLEAN] Cleaning completed.
+  EXIT /B 0
 
 
 :_KDAPI_NOTHING_TO_CLEAN
-    ECHO [CLEAN] Nothing to clean.
-    EXIT /B 0
+  ECHO [CLEAN] Nothing to clean.
+  EXIT /B 0

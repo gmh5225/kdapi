@@ -1,7 +1,7 @@
 /**
  * @file kdapi.h
  * @author Kumarjit Das
- * @date 2024-06-02
+ * @date 2024-06-20
  * @version 1.1.0
  * @brief A simple header-only C library for compile-time system information.
  */

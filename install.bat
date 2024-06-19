@@ -1,6 +1,6 @@
 @REM file: install.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-12
+@REM date: 2024-06-20
 @REM brief: Install script file for project builds.
 @REM
 @REM
@@ -34,16 +34,13 @@
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-
 SET _KDAPI_GOTO_ENVIRONMENT_INFO=false
 SET _KDAPI_GOTO_ENTRY=true
 SET _KDAPI_GOTO_COMPLETE=false
 SET _KDAPI_GOTO_ERROR_EXIT=false
 SET "TAB=	"
 
-
 GOTO :_KDAPI_START_INSTALLING
-
 
 :_KDAPI_ENVIRONMENT_INFO
   ECHO [INFO] -------------------------------------------------------------------------
@@ -61,10 +58,8 @@ GOTO :_KDAPI_START_INSTALLING
 
   GOTO :_KDAPI_ERROR_EXIT
 
-
 :_KDAPI_START_INSTALLING
   ECHO [INSTALL] Initializing install...
-
 
 @REM Set the environment
 IF NOT DEFINED KDAPI_SETUP_ENV_FILE (
@@ -83,7 +78,6 @@ IF EXIST "%KDAPI_SETUP_ENV_FILE%" (
   ECHO [INSTALL] Install environment setup not done. Continueing...
 )
 
-
 @REM Check KDAPI_INSTALL_LOCATION
 IF NOT DEFINED KDAPI_INSTALL_LOCATION (
   SET KDAPI_INSTALL_LOCATION=%~dp0
@@ -96,7 +90,6 @@ IF NOT EXIST "%KDAPI_INSTALL_LOCATION%" (
 
 ECHO [INSTALL] Install location: %KDAPI_INSTALL_LOCATION%
 
-
 @REM Check KDAPI_INSTALL_NAME
 IF NOT DEFINED KDAPI_INSTALL_NAME (
   ECHO [ERROR] `KDAPI_INSTALL_NAME` is not set.
@@ -104,7 +97,6 @@ IF NOT DEFINED KDAPI_INSTALL_NAME (
 )
 
 ECHO [INSTALL] Install directory name: %KDAPI_INSTALL_NAME%
-
 
 @REM Check KDAPI_INSTALL_VERSION
 IF NOT DEFINED KDAPI_INSTALL_VERSION (
@@ -114,7 +106,6 @@ IF NOT DEFINED KDAPI_INSTALL_VERSION (
 
 ECHO [INSTALL] Install version: %KDAPI_INSTALL_VERSION%
 
-
 @REM Check KDAPI_INSTALL_INCLUDE_FILES
 IF NOT DEFINED KDAPI_INSTALL_INCLUDE_FILES (
   ECHO [ERROR] `KDAPI_INSTALL_INCLUDE_FILES` is not set.
@@ -123,15 +114,12 @@ IF NOT DEFINED KDAPI_INSTALL_INCLUDE_FILES (
 
 ECHO [INSTALL] Include files: %KDAPI_INSTALL_INCLUDE_FILES%
 
-
 ECHO [INSTALL] Started installing...
-
 
 @REM Create the install directory
 SET "KDAPI_INSTALL_DIR=%KDAPI_INSTALL_LOCATION%\%KDAPI_INSTALL_NAME%-%KDAPI_INSTALL_VERSION%"
 MKDIR "%KDAPI_INSTALL_DIR%"
 ECHO [INSTALL] Created install directory ^("%KDAPI_INSTALL_DIR%"^).
-
 
 @REM Copy include files
 SET KDAPI_TMP_ERR=false
@@ -152,7 +140,6 @@ IF "%KDAPI_TMP_ERR%"=="true" (
 
 ECHO [INSTALL] Copied all include files.
 
-
 @REM Copy license, readme, and release-notes files
 SET KDAPI_TMP_ERR=false
 
@@ -172,14 +159,11 @@ IF "%KDAPI_TMP_ERR%"=="true" (
 
 ECHO [INSTALL] Copied license, readme, and release-notes files.
 
-
 GOTO :_KDAPI_COMPLETE
-
 
 :_KDAPI_ERROR_EXIT
   ECHO [ERROR] Error^(s^) occured. Could not finish installing.
   EXIT /B 1
-
 
 :_KDAPI_COMPLETE
   ECHO [INSTALL] Finished installing.

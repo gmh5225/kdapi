@@ -1,7 +1,7 @@
 /**
  * @file test.c
  * @author Kumarjit Das
- * @date 2024-05-14
+ * @date 2024-06-20
  * @brief KDAPI library main test source file.
  */
 /**
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
     "Watcom C/C++"
     #else
     "[Unknown]"
-    #endif  // KD_COMPILER_INTEL
+    #endif  /* KD_COMPILER_INTEL */
     "\n"
   );
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
       " 64-bit"
       #else
       " 32-bit"
-      #endif  // defined KD_OS_MINGW64
+      #endif  /* defined KD_OS_MINGW64 */
     #elif defined KD_OS_GO32
     "GO32/MS-DOS"
     #elif defined KD_OS_DOS32
@@ -127,14 +127,14 @@ int main(int argc, char **argv)
       " 64-bit"
       #else
       " 32-bit"
-      #endif  // defined KD_OS_WINCE
+      #endif  /* defined KD_OS_WINCE */
     #elif defined KD_OS_PALM
     "PalmOS"
     #elif defined KD_OS_MACOS
     "MacOS"
     #else
     "[Unknown]"
-    #endif  // KD_OS_LINUX
+    #endif  /* KD_OS_LINUX */
     "\n"
   );
 
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     "PowerPC"
       #if defined KD_CPU_PPC64
       " 64-bit"
-      #endif  // defined KD_CPU_PPC64
+      #endif  /* defined KD_CPU_PPC64 */
     #elif defined KD_CPU_CRAYT3E
     "Cray T3E (Alpha 21164)"
     #elif defined KD_CPU_SH3 || defined KD_CPU_SH4
@@ -158,7 +158,7 @@ int main(int argc, char **argv)
       "4"
       #else
       "3"
-      #endif  // defined KD_CPU_SH4
+      #endif  /* defined KD_CPU_SH4 */
     #elif defined KD_CPU_SPARC64
     "Sparc/64"
     #elif defined KD_CPU_SPARC
@@ -174,14 +174,14 @@ int main(int argc, char **argv)
       "AMD x86-64"
       #else
       "Intel 386+"
-      #endif  // defined KD_CPU_X86_64
+      #endif  /* defined KD_CPU_X86_64 */
     #elif defined KD_CPU_AXP
     "AXP"
     #elif defined KD_CPU_HPPA
     "PA-RISC"
     #else
     "[Unknown]"
-    #endif  // KD_CPU_PPC750
+    #endif  /* KD_CPU_PPC750 */
     "\n"
   );
 
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
     "Little"
     #else
     "Big"
-    #endif  // KD_ENDIAN_LITTLE
+    #endif  /* KD_ENDIAN_LITTLE */
     "\n"
   );
 

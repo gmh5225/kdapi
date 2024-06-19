@@ -64,7 +64,3 @@ Build/*
 # Workspace
 *.sublime-project
 *.sublime-workspace
-
-# Environment files
-setup_env.bat
-setup_env.sh

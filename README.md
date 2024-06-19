@@ -1,33 +1,16 @@
-
 # KDAPI
 
-KDAPI is a simple, header-only C library designed to provide compile-time system information. This project targets both Windows and GNU/Linux (32-bit and 64-bit) platforms. The library aims to help developers easily retrieve details about the compiler, target operating system, target CPU, and endianness at compile-time.
+  A simple header-only C library for compile-time system information.
 
 ## Table of Contents
 
-- [KDAPI](#kdapi)
+- [kdapi](#kdapi)
   - [Table of Contents](#table-of-contents)
-  - [Features](#features)
+  - [Description](#description)
   - [Installation](#installation)
-  - [Requirements](#requirements)
-  - [Getting Started](#getting-started)
-    - [Setup Environment](#setup-environment)
-      - [On Linux](#on-linux)
-      - [On Windows](#on-windows)
-    - [Building the Project](#building-the-project)
-      - [On Linux](#on-linux-1)
-      - [On Windows](#on-windows-1)
-    - [Cleaning the Build](#cleaning-the-build)
-      - [On Linux](#on-linux-2)
-      - [On Windows](#on-windows-2)
-    - [Installing the Project](#installing-the-project)
-      - [On Linux](#on-linux-3)
-      - [On Windows](#on-windows-3)
-  - [Usage](#usage)
-    - [Example](#example)
   - [Roadmap](#roadmap)
   - [Contributing](#contributing)
-  - [Naming Convention](#naming-convention)
+  - [Naming Convension](#naming-convension)
   - [License](#license)
   - [Project Status](#project-status)
   - [Acknowledgment](#acknowledgment)
@@ -35,13 +18,11 @@ KDAPI is a simple, header-only C library designed to provide compile-time system
   - [Versioning](#versioning)
   - [Changelog](#changelog)
 
-## Features
+## Description
 
-- Detects compiler type and version.
-- Identifies the target operating system.
-- Determines the target CPU architecture.
-- Checks system endianness.
-- Provides macros for import-export signatures, calling conventions, and extern indicators.
+This is a simple header-only C library to determine system information like compiler, target OS, target CPU, endianness, import-export signature, and public API at compile-time.
+
+See the list of features and functions implemented till now in [Project Status](#project-status).
 
 ## Installation
 
@@ -90,116 +71,6 @@ To get started with this project, download and install the following.
     brew install gcc
     ```
 
-## Requirements
-
-- For building on Linux 32-bit targets on a 64-bit platform, `gcc-multilib` must be installed:
-
-  ```bash
-  sudo apt install gcc-multilib
-  ```
-
-## Getting Started
-
-Users need to set up their environment using the provided template setup files. The `setup_env.*` files in the root directory are for development purposes and are not provided to the users. Users can create their own setup files or copy the template files from the `templates` directory.
-
-### Setup Environment
-
-Copy the template setup files:
-
-#### On Linux
-
-Run the build script:
-
-```bash
-cp templates/setup_env.template.sh setup_env.sh
-```
-
-#### On Windows
-
-Run the build script:
-
-```batch
-COPY templates\setup_env.template.bat setup_env.bat
-```
-
-Modify the `setup_env.sh` and `setup_env.bat` files to match your build environment.
-
-### Building the Project
-
-#### On Linux
-
-Run the build script:
-
-```bash
-./build.sh
-```
-
-#### On Windows
-
-Run the build script:
-
-```batch
-build.bat
-```
-
-### Cleaning the Build
-
-#### On Linux
-
-Run the clean script:
-
-```bash
-./clean.sh
-```
-
-#### On Windows
-
-Run the clean script:
-
-```batch
-clean.bat
-```
-
-### Installing the Project
-
-#### On Linux
-
-Run the install script:
-
-```bash
-./install.sh
-```
-
-#### On Windows
-
-Run the install script:
-
-```batch
-install.bat
-```
-
-## Usage
-
-Include the `kdapi.h` header file in your C project to use KDAPI.
-
-```c
-#include "kdapi.h"
-```
-
-### Example
-
-An example usage of KDAPI can be found in the `test.c` file.
-
-```c
-#include <stdio.h>
-#include "kdapi.h"
-
-int main() {
-    printf("KDAPI Version: %s\n", KD_VERSION_STR);
-    return 0;
-}
-```
-
 ## Roadmap
 
 See the [open issues](https://github.com/KumarjitDas/kdapi/issues) for a list of proposed
@@ -233,23 +104,9 @@ contributions you make are greatly appreciated.
 
 - Create a *Pull Request*
 
-## Naming Convention
+## Naming Convension
 
-The KDAPI project follows a consistent naming convention to ensure readability and maintainability. Here are the key aspects of the naming convention used:
-
-- **Macro Names**: Macro names are written in uppercase letters with underscores separating words. They typically start with the prefix `KD_`.
-  - Examples: `KD_COMPILER_GCC`, `KD_OS_LINUX`, `KD_CPU_X86_64`, `KD_VERSION_MAJOR`
-
-- **Function-Like Macros**: Function-like macros also follow the uppercase with underscores convention and use parentheses to indicate parameters.
-  - Examples: `KD_EXTERN_BEGIN`, `KD_EXTERN_END`
-
-- **Constants**: Constants are defined using uppercase letters with underscores and often include a descriptive name or version number.
-  - Examples: `KD_VERSION_STR`, `KD_VERSION_MAJOR`
-
-- **File Names**: File names are in lowercase and use underscores to separate words.
-  - Examples: `kdapi.h`, `test.c`, `setup_env.sh`
-
-This naming convention helps in clearly identifying different types of identifiers and their purposes within the codebase.
+The naming convension used in this project will be listed soon.
 
 ## License
 
@@ -257,20 +114,7 @@ This project is distributed under the **BSD 2-Clause License**. See [LICENSE](LI
 
 ## Project Status
 
-List of functionalities/features implemented so far:
-
-- Compiler detection (Intel, GCC, LLVM, etc.)
-- Target operating system identification (Linux, Windows, etc.)
-- Target CPU architecture detection (x86, x64, ARM, etc.)
-- Endianness determination (little-endian, big-endian)
-- Import-export macros for DLL handling
-- Calling convention macros (cdecl, stdcall, fastcall)
-- Environment setup scripts for both Linux and Windows
-- Build scripts for compiling and linking the project
-- Clean scripts for removing build artifacts
-- Install scripts for setting up the library
-- Example test program demonstrating the library usage
-
+List of functionalities/features implemented so far...
 
 ## Acknowledgment
 
@@ -288,10 +132,10 @@ Twitter: [@kumarjitdas1999](https://twitter.com/kumarjitdas1999)
 LinkedIn:
 [Kumarjit Das | কুমারজিৎ দাস](https://www.linkedin.com/in/kumarjit-das/)
 
-E-mail: [kumarjitdas1999@gmail.com](kumarjitdas1999+github@gmail.com)
+E-mail: [kumarjitdas1999@gmail.com](kumarjitdas1999@gmail.com)
 
 Project link:
-[KDAPI](https://github.com/KumarjitDas/kdapi)
+[GitHub-KumarjitDas-kdapi](https://github.com/KumarjitDas/kdapi)
 
 ## Versioning
 

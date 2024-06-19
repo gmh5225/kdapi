@@ -1,6 +1,6 @@
 @REM file: setup_env.template.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-12
+@REM date: 2024-06-20
 @REM brief: A template for build environment setup.
 @REM
 @REM
@@ -33,7 +33,6 @@
 
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
-
 
 @REM Build specific
 ECHO Setting build specific variables...
@@ -75,8 +74,8 @@ ECHO Compiler optimization set to '%KDAPI_COMPILER_OPTIMIZE%'
 SET KDAPI_BUILD_TYPE=debug
 ECHO Build type set to '%KDAPI_BUILD_TYPE%'
 
-
 @REM Installation specific
+ECHO Setting install specific variables...
 
 SET "KDAPI_INSTALL_LOCATION=C:\Program Files"
 ECHO Install location set to '%KDAPI_INSTALL_LOCATION%'

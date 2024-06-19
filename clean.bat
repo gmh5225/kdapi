@@ -1,6 +1,6 @@
 @REM file: clean.bat
 @REM author: Kumarjit Das
-@REM date: 2024-06-12
+@REM date: 2024-06-20
 @REM brief: Clean script file for project builds.
 @REM
 @REM
@@ -34,15 +34,12 @@
 @ECHO OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-
 ECHO [CLEAN] Cleaning up builds...
-
 
 @REM Build directories
 SET KDAPI_BUILD_DIR=build
 SET KDAPI_LIB_DIR=%KDAPI_BUILD_DIR%\lib
 SET KDAPI_BIN_DIR=%KDAPI_BUILD_DIR%\bin
-
 
 IF "%~1"=="all" (
   IF EXIST "%KDAPI_BUILD_DIR%" (
@@ -57,11 +54,9 @@ IF "%~1"=="all" (
   GOTO :_KDAPI_COMPLETE
 )
 
-
 IF NOT EXIST "%KDAPI_LIB_DIR%" IF NOT EXIST "%KDAPI_BIN_DIR%" (
   GOTO :_KDAPI_NOTHING_TO_CLEAN
 )
-
 
 @REM Clean the lib directory
 IF EXIST "%KDAPI_LIB_DIR%" (
@@ -78,7 +73,6 @@ IF EXIST "%KDAPI_LIB_DIR%" (
   ECHO [CLEAN] "%KDAPI_LIB_DIR%" does not exist.
 )
 
-
 @REM Clean the bin directory
 IF EXIST "%KDAPI_BIN_DIR%" (
   ECHO [CLEAN] Removing contents of "%KDAPI_BIN_DIR%"...
@@ -94,11 +88,9 @@ IF EXIST "%KDAPI_BIN_DIR%" (
   ECHO [CLEAN] "%KDAPI_BIN_DIR%" does not exist.
 )
 
-
 :_KDAPI_COMPLETE
   ECHO [CLEAN] Cleaning completed.
   EXIT /B 0
-
 
 :_KDAPI_NOTHING_TO_CLEAN
   ECHO [CLEAN] Nothing to clean.
